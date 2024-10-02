@@ -1,295 +1,208 @@
-import logo from "./logo.svg";
-import "./App.css";
-import "bootstrap/dist/css/bootstrap.min.css";
-import "@fortawesome/fontawesome-free/css/all.css";
-import "bootstrap/dist/js/bootstrap.bundle";
-function App() {
-  return (
-    <>
-      <div className="container-fluid bg-dark text-white">
-        <div className="row">
-          <div className="col-lg-12">
-            <div className="container">
-              <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-                <div className="container-fluid">
-                  <a className="navbar-brand" href="#">
-                    Pizza House
-                  </a>
-                  <button
-                    className="navbar-toggler"
-                    type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#navbarSupportedContent"
-                    aria-controls="navbarSupportedContent"
-                    aria-expanded="false"
-                    aria-label="Toggle navigation"
-                  >
-                    <span className="navbar-toggler-icon"></span>
-                  </button>
-                  <div
-                    className="collapse navbar-collapse"
-                    id="navbarSupportedContent"
-                  >
-                    <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                      <li className="nav-item">
-                        <a
-                          className="nav-link active"
-                          aria-current="page"
-                          href="#"
-                        >
-                          Home
-                        </a>
-                      </li>
-                      <li className="nav-item active">
-                        <a className="nav-link" href="#">
-                          About Us
-                        </a>
-                      </li>
-                      <li className="nav-item active">
-                        <a
-                          className="nav-link"
-                          href="#"
-                          role="button"
-                          aria-expanded="false"
-                        >
-                          Contact
-                        </a>
-                      </li>
-                    </ul>
-                    <form className="d-flex" role="search">
-                      <input
-                        className="form-control me-2"
-                        type="search"
-                        placeholder="Search"
-                        aria-label="Search"
-                      />
-                      <button className="btn btn-danger" type="submit">
-                        <i className="fa fa-search"></i>
-                      </button>
-                    </form>
-                  </div>
-                </div>
-              </nav>
-            </div>
-          </div>
-          <div className="col-lg-12 mb-5">
-            <div className="row">
-              <div id="carouselExampleCaptions" className="carousel slide">
-                <div className="carousel-indicators">
-                  <button
-                    type="button"
-                    data-bs-target="#carouselExampleCaptions"
-                    data-bs-slide-to="0"
-                    className="active"
-                    aria-current="true"
-                    aria-label="Slide 1"
-                  ></button>
-                  <button
-                    type="button"
-                    data-bs-target="#carouselExampleCaptions"
-                    data-bs-slide-to="1"
-                    aria-label="Slide 2"
-                  ></button>
-                  <button
-                    type="button"
-                    data-bs-target="#carouselExampleCaptions"
-                    data-bs-slide-to="2"
-                    aria-label="Slide 3"
-                  ></button>
-                </div>
-                <div className="carousel-inner">
-                  <div className="carousel-item active">
-                    <img
-                      src="./images/pizza1.jpg"
-                      className="d-block w-100"
-                      alt="..."
-                    />
-                    <div className="carousel-caption d-none d-md-block">
-                      <h5>First slide label</h5>
-                      <p>
-                        Some representative placeholder content for the first
-                        slide.
-                      </p>
-                    </div>
-                  </div>
-                  <div className="carousel-item active">
-                    <img
-                      src="./images/pizza2.jpg"
-                      className="d-block w-100"
-                      alt="..."
-                    />
-                    <div className="carousel-caption d-none d-md-block">
-                      <h5>Second slide label</h5>
-                      <p>
-                        Some representative placeholder content for the second
-                        slide.
-                      </p>
-                    </div>
-                  </div>
-                  <div className="carousel-item active">
-                    <img
-                      src="./images/pizza3.jpg"
-                      className="d-block w-100"
-                      alt="..."
-                    />
-                    <div className="carousel-caption d-none d-md-block">
-                      <h5>Third slide label</h5>
-                      <p>
-                        Some representative placeholder content for the third
-                        slide.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-                <button
-                  className="carousel-control-prev"
-                  type="button"
-                  data-bs-target="#carouselExampleCaptions"
-                  data-bs-slide="prev"
-                >
-                  <span
-                    className="carousel-control-prev-icon"
-                    aria-hidden="true"
-                  ></span>
-                  <span className="visually-hidden">Previous</span>
-                </button>
-                <button
-                  className="carousel-control-next"
-                  type="button"
-                  data-bs-target="#carouselExampleCaptions"
-                  data-bs-slide="next"
-                >
-                  <span
-                    className="carousel-control-next-icon"
-                    aria-hidden="true"
-                  ></span>
-                  <span className="visually-hidden">Next</span>
-                </button>
-              </div>
-            </div>
-          </div>
-          <div className="col-lg-12 mb-5">
-            <div className="container">
-              <div className="row">
-                <h2>Our Menu</h2>
-                <div className="col-md-3">
-                  <div className="card">
-                    <img
-                      src="./images/menu1.jpg"
-                      className="card-img-top"
-                      alt="..."
-                    />
-                    <div className="card-body">
-                      <h5 className="card-title">Margherita Pizza</h5>
-                      <p className="text-muted">$24.00</p>
-                      <a href="#" className="form-control btn btn-dark">
-                        Buy
-                      </a>
-                    </div>
-                  </div>
-                </div>
+import React, { useState, useEffect } from "react";
+import Header from "./components/Header";
+import { Carousel } from "react-bootstrap";
+import { Container, Row, Col, Form, Button } from "react-bootstrap";
+import CardItem from "./components/CardItem";
+import SelectedItemsPopup from "./components/SelectedItemsPopup";
 
-                <div className="col-md-3">
-                  <div className="card">
-                    <img
-                      src="./images/menu2.jpg"
-                      className="card-img-top"
-                      alt="..."
-                    />
-                    <div className="card-body">
-                      <h5 className="card-title">Mushroom Pizza</h5>
-                      <p className="text-muted">$25.00</p>
-                      <a href="#" className="form-control btn btn-dark">
-                        Buy
-                      </a>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-md-3">
-                  <div className="card">
-                    <img
-                      src="./images/menu3.jpg"
-                      className="card-img-top"
-                      alt="..."
-                    />
-                    <div className="card-body">
-                      <h5 className="card-title">Hawaiian Pizza</h5>
-                      <p className="text-muted">$30.00</p>
-                      <a href="#" className="form-control btn btn-dark">
-                        Buy
-                      </a>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-md-3">
-                  <div className="card">
-                    <img
-                      src="./images/menu1.jpg"
-                      className="card-img-top"
-                      alt="..."
-                    />
-                    <div className="card-body">
-                      <h5 className="card-title">Pesto Pizza</h5>
-                      <p className="text-muted">$24.00</p>
-                      <a href="#" className="form-control btn btn-dark">
-                        Buy
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="col-lg-12">
-            <div className="container">
-              <div className="row">
-                <h2 className="text-center">Book Your Table</h2>
-                <div class="row mb-3">
-                  <div class="col">
-                    <input
-                      type="text"
-                      class="form-control"
-                      placeholder="Your name *"
-                      aria-label="Your name *"
-                    />
-                  </div>
-                  <div class="col">
-                    <input
-                      type="text"
-                      class="form-control"
-                      placeholder="Your Email *"
-                      aria-label="Your Email *"
-                    />
-                  </div>
-                  <div class="col">
-                    <select id="inputState" class="form-select">
-                      <option selected>Select a Service...</option>
-                      <option>...</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-              <div className="row mb-3">
-                <div class="col">
-                  <textarea
-                    className="form-control"
-                    rows="5"
-                    placeholder="Please write your comment"
-                  ></textarea>
-                </div>
-              </div>
-              <div className="row mb-5">
-                <div class="col">
-                  <button className="btn btn-warning text-white">
-                    Send Message
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
+function App() {
+  const [cartItems, setCartItems] = useState(() => {
+    // Khởi tạo giỏ hàng từ localStorage nếu có
+    const storedCart = localStorage.getItem("cart");
+    return storedCart ? JSON.parse(storedCart) : [];
+  });
+
+  const [showPopup, setShowPopup] = useState(false);
+
+  useEffect(() => {
+    // Lưu giỏ hàng vào localStorage mỗi khi giỏ hàng thay đổi
+    localStorage.setItem("cart", JSON.stringify(cartItems));
+  }, [cartItems]);
+
+  const addToCart = (item) => {
+    setCartItems((prevCartItems) => {
+      const existingItem = prevCartItems.find(
+        (cartItem) => cartItem.id === item.id
+      );
+      if (existingItem) {
+        // Nếu đã có trong giỏ hàng, tăng số lượng
+        return prevCartItems.map((cartItem) =>
+          cartItem.id === item.id
+            ? { ...cartItem, quantity: cartItem.quantity + 1 }
+            : cartItem
+        );
+      } else {
+        // Nếu chưa có, thêm vào giỏ hàng
+        return [...prevCartItems, { ...item, quantity: 1 }];
+      }
+    });
+  };
+
+  const updateQuantity = (itemId, delta) => {
+    setCartItems((prevCartItems) =>
+      prevCartItems
+        .map((cartItem) =>
+          cartItem.id === itemId
+            ? { ...cartItem, quantity: cartItem.quantity + delta }
+            : cartItem
+        )
+        .filter((cartItem) => cartItem.quantity > 0)
+    );
+  };
+
+  return (
+    <div className="bg-dark">
+      <Header
+        cartItemCount={cartItems.reduce((sum, item) => sum + item.quantity, 0)}
+        onCartClick={() => setShowPopup(true)}
+      />
+      <Row className="col-lg-12 mb-5">
+        <Carousel>
+          <Carousel.Item>
+            <img
+              className="d-block w-100"
+              src="./images/pizza1.jpg"
+              alt="First slide"
+            />
+            <Carousel.Caption>
+              <h5>First slide label</h5>
+              <p>
+                Some representative placeholder content for the first slide.
+              </p>
+            </Carousel.Caption>
+          </Carousel.Item>
+
+          <Carousel.Item>
+            <img
+              className="d-block w-100"
+              src="./images/pizza2.jpg"
+              alt="Second slide"
+            />
+            <Carousel.Caption>
+              <h5>Second slide label</h5>
+              <p>
+                Some representative placeholder content for the second slide.
+              </p>
+            </Carousel.Caption>
+          </Carousel.Item>
+
+          <Carousel.Item>
+            <img
+              className="d-block w-100"
+              src="./images/pizza3.jpg"
+              alt="Third slide"
+            />
+            <Carousel.Caption>
+              <h5>Third slide label</h5>
+              <p>
+                Some representative placeholder content for the third slide.
+              </p>
+            </Carousel.Caption>
+          </Carousel.Item>
+        </Carousel>
+      </Row>
+      <div className="container mb-4">
+        <h2 className="text-white">Our Menu</h2>
+        <div className="row">
+          <CardItem
+            item={{
+              id: 1,
+              name: "Margherita Pizza",
+              price: 24,
+              imgSrc: "./images/menu1.jpg",
+            }}
+            addToCart={addToCart}
+          />
+          <CardItem
+            item={{
+              id: 2,
+              name: "Mushroom Pizza",
+              price: 25,
+              imgSrc: "./images/menu2.jpg",
+            }}
+            addToCart={addToCart}
+          />
+          <CardItem
+            item={{
+              id: 3,
+              name: "Hawaiian Pizza",
+              price: 30,
+              imgSrc: "./images/menu3.jpg",
+            }}
+            addToCart={addToCart}
+          />
+          <CardItem
+            item={{
+              id: 4,
+              name: "Pesto Pizza",
+              price: 35,
+              imgSrc: "./images/menu4.jpg",
+            }}
+            addToCart={addToCart}
+          />
         </div>
       </div>
-    </>
+      <SelectedItemsPopup
+        show={showPopup}
+        onHide={() => setShowPopup(false)}
+        cartItems={cartItems}
+        updateQuantity={updateQuantity}
+      />
+      <div className="col-lg-12 pb-5">
+        <Container>
+          <Row>
+            <h2 className="text-center text-white">Book Your Table</h2>
+          </Row>
+          <Row className="mb-3">
+            <Col>
+              <Form.Group controlId="formName">
+                <Form.Control
+                  type="text"
+                  placeholder="Your name *"
+                  aria-label="Your name *"
+                />
+              </Form.Group>
+            </Col>
+            <Col>
+              <Form.Group controlId="formEmail">
+                <Form.Control
+                  type="email"
+                  placeholder="Your Email *"
+                  aria-label="Your Email *"
+                />
+              </Form.Group>
+            </Col>
+            <Col>
+              <Form.Group controlId="formService">
+                <Form.Select aria-label="Select a Service...">
+                  <option>Select a Service...</option>
+                  <option value="1">Service 1</option>
+                  <option value="2">Service 2</option>
+                </Form.Select>
+              </Form.Group>
+            </Col>
+          </Row>
+          <Row className="mb-3">
+            <Col>
+              <Form.Group controlId="formComment">
+                <Form.Control
+                  as="textarea"
+                  rows={5}
+                  placeholder="Please write your comment"
+                />
+              </Form.Group>
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <Button variant="warning" className="text-white">
+                Send Message
+              </Button>
+            </Col>
+          </Row>
+        </Container>
+      </div>
+    </div>
   );
 }
 
