@@ -1,0 +1,39 @@
+// src/components/Header.scss
+
+.cart-button {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  transition: background-color 0.2s ease-in-out;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.1); // subtle hover effect
+  }
+
+  .fa-shopping-cart {
+    font-size: 1.25rem;
+  }
+
+  .cart-badge {
+    position: absolute;
+    top: -5px;
+    right: -10px;
+    font-size: 0.75rem;
+    padding: 0.3rem 0.5rem;
+  }
+}
+
+.navbar-brand {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.navbar-nav .nav-link {
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+}
+
+.button {
+  padding: 0.5rem 1rem;
+}

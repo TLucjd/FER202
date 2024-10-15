@@ -1,23 +1,40 @@
 import React, { useState, useEffect } from "react";
 import Header from "./components/Header";
-import { Carousel } from "react-bootstrap";
-import { Container, Row, Col, Form, Button } from "react-bootstrap";
+import { Carousel, Container, Row, Col, Form, Button } from "react-bootstrap";
 import CardItem from "./components/CardItem";
 import SelectedItemsPopup from "./components/SelectedItemsPopup";
+import LoginModal from "./components/LoginModal";
+import { loginUser, fetchProducts } from "./services/api";
 
 function App() {
   const [cartItems, setCartItems] = useState(() => {
-    // Khởi tạo giỏ hàng từ localStorage nếu có
     const storedCart = localStorage.getItem("cart");
     return storedCart ? JSON.parse(storedCart) : [];
   });
 
   const [showPopup, setShowPopup] = useState(false);
+  const [showLogin, setShowLogin] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(() => {
+    const storedUser = localStorage.getItem("user");
+    return storedUser ? true : false;
+  });
+  const [products, setProducts] = useState([]);
+  const [user, setUser] = useState(() => {
+    const storedUser = localStorage.getItem("user");
+    return storedUser ? JSON.parse(storedUser) : null;
+  });
+  const [loading, setLoading] = useState(false);
+  const [loginError, setLoginError] = useState("");
 
   useEffect(() => {
-    // Lưu giỏ hàng vào localStorage mỗi khi giỏ hàng thay đổi
     localStorage.setItem("cart", JSON.stringify(cartItems));
   }, [cartItems]);
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      loadProducts();
+    }
+  }, [isLoggedIn]);
 
   const addToCart = (item) => {
     setCartItems((prevCartItems) => {
@@ -25,14 +42,12 @@ function App() {
         (cartItem) => cartItem.id === item.id
       );
       if (existingItem) {
-        // Nếu đã có trong giỏ hàng, tăng số lượng
         return prevCartItems.map((cartItem) =>
           cartItem.id === item.id
             ? { ...cartItem, quantity: cartItem.quantity + 1 }
             : cartItem
         );
       } else {
-        // Nếu chưa có, thêm vào giỏ hàng
         return [...prevCartItems, { ...item, quantity: 1 }];
       }
     });
@@ -50,12 +65,61 @@ function App() {
     );
   };
 
+  const handleLoginClick = () => {
+    setShowLogin(true);
+  };
+
+  const handleLoginSuccess = async (credentials) => {
+    setLoading(true);
+    setLoginError("");
+    try {
+      const data = await loginUser(credentials);
+      setUser(data.user);
+      setIsLoggedIn(true);
+      localStorage.setItem("user", JSON.stringify(data.user));
+
+      // Clear the cart when the user logs in
+      setCartItems([]); // Clear the cart
+      localStorage.removeItem("cart"); // Optional: remove the cart from local storage
+
+      setLoading(false);
+      return data.user;
+    } catch (error) {
+      setLoginError(error.message);
+      setLoading(false);
+      throw error;
+    }
+  };
+
+  const loadProducts = async () => {
+    try {
+      const fetchedProducts = await fetchProducts();
+      setProducts(fetchedProducts);
+    } catch (error) {
+      console.error("Failed to fetch products:", error);
+    }
+  };
+
+  const logout = () => {
+    setUser(null);
+    setIsLoggedIn(false);
+    localStorage.removeItem("user");
+    // Optionally, remove the token if stored
+    // localStorage.removeItem("token");
+  };
+
   return (
     <div className="bg-dark">
       <Header
         cartItemCount={cartItems.reduce((sum, item) => sum + item.quantity, 0)}
         onCartClick={() => setShowPopup(true)}
+        onLoginClick={handleLoginClick}
+        isLoggedIn={isLoggedIn}
+        user={user}
+        onLogout={logout}
       />
+
+      {/* Carousel Section */}
       <Row className="col-lg-12 mb-5">
         <Carousel>
           <Carousel.Item>
@@ -65,7 +129,7 @@ function App() {
               alt="First slide"
             />
             <Carousel.Caption>
-              <h5>First slide label</h5>
+              <h5>First Slide Label</h5>
               <p>
                 Some representative placeholder content for the first slide.
               </p>
@@ -79,7 +143,7 @@ function App() {
               alt="Second slide"
             />
             <Carousel.Caption>
-              <h5>Second slide label</h5>
+              <h5>Second Slide Label</h5>
               <p>
                 Some representative placeholder content for the second slide.
               </p>
@@ -93,7 +157,7 @@ function App() {
               alt="Third slide"
             />
             <Carousel.Caption>
-              <h5>Third slide label</h5>
+              <h5>Third Slide Label</h5>
               <p>
                 Some representative placeholder content for the third slide.
               </p>
@@ -101,53 +165,47 @@ function App() {
           </Carousel.Item>
         </Carousel>
       </Row>
+
+      {/* Products Section */}
       <div className="container mb-4">
         <h2 className="text-white">Our Menu</h2>
         <div className="row">
-          <CardItem
-            item={{
-              id: 1,
-              name: "Margherita Pizza",
-              price: 24,
-              imgSrc: "./images/menu1.jpg",
-            }}
-            addToCart={addToCart}
-          />
-          <CardItem
-            item={{
-              id: 2,
-              name: "Mushroom Pizza",
-              price: 25,
-              imgSrc: "./images/menu2.jpg",
-            }}
-            addToCart={addToCart}
-          />
-          <CardItem
-            item={{
-              id: 3,
-              name: "Hawaiian Pizza",
-              price: 30,
-              imgSrc: "./images/menu3.jpg",
-            }}
-            addToCart={addToCart}
-          />
-          <CardItem
-            item={{
-              id: 4,
-              name: "Pesto Pizza",
-              price: 35,
-              imgSrc: "./images/menu4.jpg",
-            }}
-            addToCart={addToCart}
-          />
+          {products.length > 0 ? (
+            products.map((product) => (
+              <CardItem
+                key={product.id}
+                item={{
+                  id: product.id,
+                  title: product.title,
+                  price: product.price,
+                  salePrice: product.salePrice,
+                  image: product.image,
+                }}
+                addToCart={addToCart}
+              />
+            ))
+          ) : (
+            <p className="text-white">Loading products...</p>
+          )}
         </div>
       </div>
+
+      {/* Cart Popup */}
       <SelectedItemsPopup
         show={showPopup}
         onHide={() => setShowPopup(false)}
         cartItems={cartItems}
         updateQuantity={updateQuantity}
       />
+
+      {/* Login Modal */}
+      <LoginModal
+        show={showLogin}
+        onHide={() => setShowLogin(false)}
+        onLoginSuccess={handleLoginSuccess}
+      />
+
+      {/* Book Your Table Section */}
       <div className="col-lg-12 pb-5">
         <Container>
           <Row>
@@ -158,8 +216,9 @@ function App() {
               <Form.Group controlId="formName">
                 <Form.Control
                   type="text"
-                  placeholder="Your name *"
-                  aria-label="Your name *"
+                  placeholder="Your Name *"
+                  aria-label="Your Name *"
+                  required
                 />
               </Form.Group>
             </Col>
@@ -169,13 +228,14 @@ function App() {
                   type="email"
                   placeholder="Your Email *"
                   aria-label="Your Email *"
+                  required
                 />
               </Form.Group>
             </Col>
             <Col>
               <Form.Group controlId="formService">
-                <Form.Select aria-label="Select a Service...">
-                  <option>Select a Service...</option>
+                <Form.Select aria-label="Select a Service..." required>
+                  <option value="">Select a Service...</option>
                   <option value="1">Service 1</option>
                   <option value="2">Service 2</option>
                 </Form.Select>

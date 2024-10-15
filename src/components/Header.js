@@ -1,6 +1,8 @@
+// src/components/Header.js
 import "bootstrap/dist/css/bootstrap.min.css";
 import "@fortawesome/fontawesome-free/css/all.css";
 import "bootstrap/dist/js/bootstrap.bundle";
+import React from "react";
 import {
   Navbar,
   Nav,
@@ -8,8 +10,18 @@ import {
   FormControl,
   Button,
   Container,
+  NavDropdown,
 } from "react-bootstrap";
-const Header = ({ cartItemCount, onCartClick }) => {
+import "../styles/Header.scss"; // Adding custom styles
+
+const Header = ({
+  cartItemCount,
+  onCartClick,
+  onLoginClick,
+  isLoggedIn,
+  user,
+  onLogout,
+}) => {
   return (
     <>
       <Navbar bg="dark" variant="dark" expand="lg">
@@ -36,13 +48,42 @@ const Header = ({ cartItemCount, onCartClick }) => {
                 <i className="fa fa-search"></i>
               </Button>
             </Form>
+
+            {/* Conditional Rendering based on authentication status */}
+            {isLoggedIn ? (
+              <Nav className="ms-4">
+                <NavDropdown
+                  title={`Welcome, ${user?.name || "User"}`}
+                  id="user-nav-dropdown"
+                >
+                  <NavDropdown.Item onClick={onLogout}>
+                    <i className="fa fa-sign-out-alt me-2"></i> Logout
+                  </NavDropdown.Item>
+                </NavDropdown>
+              </Nav>
+            ) : (
+              <Button
+                variant="outline-light"
+                className="ms-4"
+                onClick={onLoginClick}
+              >
+                <i className="fa fa-sign-in-alt"></i> Login
+              </Button>
+            )}
+
+            {/* Cart Button */}
             <Button
               variant="outline-light"
-              className="ms-4"
+              className="ms-3 cart-button" // Added custom class
               onClick={onCartClick}
             >
-              <i className="fa fa-shopping-cart"></i> Cart
-              <span className="ms-1 badge bg-danger">{cartItemCount}</span>
+              <i className="fa fa-shopping-cart"></i>
+              <span className="ms-1">Cart</span>
+              {cartItemCount > 0 && (
+                <span className="badge rounded-pill bg-danger cart-badge">
+                  {cartItemCount}
+                </span>
+              )}
             </Button>
           </Navbar.Collapse>
         </Container>
